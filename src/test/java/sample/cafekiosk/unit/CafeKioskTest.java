@@ -3,6 +3,9 @@ package sample.cafekiosk.unit;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.unit.beverage.Americano;
 import sample.cafekiosk.unit.beverage.Latte;
+import sample.cafekiosk.unit.order.Order;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -95,5 +98,40 @@ class CafeKioskTest {
 
         // then
         assertThat(cafeKiosk.getBeverages()).isEmpty();
+    }
+
+    /**
+     * createOrder() 메서드 내에 LocalDateTime.now()를 만들어서 사용하는 방식으로는
+     * 현재 시각에 따라 주문 생성 테스트가 성공할 수도, 실패할 수도 있다.
+     * 따라서 LocalDateTime을 파라미터로 받아서 사용하도록 메서드를 만드는 것이 더 테스트하기 쉽다.
+     */
+    @Test
+    void createOrderWithCurrentTime() {
+        // given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        // when
+        cafeKiosk.add(americano);
+
+        Order order = cafeKiosk.createOrder(LocalDateTime.of(2024, 4, 8, 10, 0));
+
+        // then
+        assertThat(order.getBeverages()).hasSize(1);
+        assertThat(order.getBeverages().get(0).getName()).isEqualTo("아메리카노");
+    }
+
+    @Test
+    void createOrderOutsideOpenTime() {
+        // given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        // when & then
+        cafeKiosk.add(americano);
+
+        assertThatThrownBy(() -> cafeKiosk.createOrder(LocalDateTime.of(2024, 4, 8, 9, 59)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문 가능 시간이 아닙니다. 관리자에게 문의하세요.");
     }
 }
