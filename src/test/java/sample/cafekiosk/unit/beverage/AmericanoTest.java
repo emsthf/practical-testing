@@ -12,8 +12,6 @@ class AmericanoTest {
         // given
         Americano americano = new Americano();
 
-        // when
-
         // then
 //        assertEquals(americano.getName(), "아메리카노");  // JUnit 5의 비교 api
         assertThat(americano.getName()).isEqualTo("아메리카노");  // AssertJ의 비교 api. 위 메서드 보다 더 명시적
@@ -23,8 +21,6 @@ class AmericanoTest {
     void getPrice() {
         // given
         Americano americano = new Americano();
-
-        // when
 
         // then
         assertThat(americano.getPrice()).isEqualTo(4000);
