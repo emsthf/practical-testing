@@ -100,6 +100,23 @@ class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages()).isEmpty();
     }
 
+    @Test
+    void calculateTotalPrice() {
+        // given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        Latte latte = new Latte();
+
+        // when
+        cafeKiosk.add(americano);
+        cafeKiosk.add(latte);
+
+        int totalPrice = cafeKiosk.calculateTotalPrice();
+
+        // then
+        assertThat(totalPrice).isEqualTo(8500);
+    }
+
     /**
      * createOrder() 메서드 내에 LocalDateTime.now()를 만들어서 사용하는 방식으로는
      * 현재 시각에 따라 주문 생성 테스트가 성공할 수도, 실패할 수도 있다.
