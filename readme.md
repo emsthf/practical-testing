@@ -366,3 +366,9 @@ MailSendClient 컴포넌트에 많은 메서드가 있고, MailService에서 이
 나는 MailSendClient의 sendEmail()만 stubbing을 하고 싶고 나머지 메서드는 원본 객체의 기능이 동일하게 작동했으면 좋겠다. 이럴 때 **@Spy**를 사용하면 좋다.
 
 @Mock으로 테스트를 돌리면 아무런 로그가 찍히지 않지만, @Spy로 돌리면 stubbing한 부분을 제외한 로그가 남게 된다.
+
+## BDDMockito
+BDD는 행동주도 개발. 지금까지 stubbing한 테스트 코드를 보면 given 절에 Mockito의 when 메서드가 사용되는 것을 볼 수 있다. given인데 문법이 when이네?
+
+그래서 고민 끝에 탄생한 문법이 BDDMockito이다. 모든 동작이 동일한데 BDD 스타일로 작성할 수 있게 이름만 BDDMockito, given, willReturn으로 변경된 것이다.
+

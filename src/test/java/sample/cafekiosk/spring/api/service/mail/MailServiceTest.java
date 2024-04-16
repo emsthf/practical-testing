@@ -3,6 +3,7 @@ package sample.cafekiosk.spring.api.service.mail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -27,7 +28,7 @@ class MailServiceTest {
      * 나는 MailSendClient의 sendEmail()만 stubbing을 하고 싶고 나머지 메서드는 원본 객체의 기능이 동일하게 작동했으면 좋겠다. 이럴 때 @Spy를 사용하면 좋다.
      * @Spy는 실제 객체를 기반으로 만들어지기 때문에 그냥 when 절을 사용하면 안되고 doReturn()을 같은 문법을 사용해야 한다.
      */
-    @Spy
+    @Mock
     private MailSendClient mailSendClient;
 
     @Mock
@@ -52,9 +53,12 @@ class MailServiceTest {
 
 //        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
 //                .thenReturn(true);
-        doReturn(true)
-                .when(mailSendClient)
-                .sendEmail(anyString(), anyString(), anyString(), anyString());
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
+
+//        doReturn(true)
+//                .when(mailSendClient)
+//                .sendEmail(anyString(), anyString(), anyString(), anyString());
 
         // when
         boolean result = mailService.sendMail("", "", "", "");
