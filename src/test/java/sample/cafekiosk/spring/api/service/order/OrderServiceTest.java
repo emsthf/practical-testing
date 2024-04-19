@@ -4,8 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 import sample.cafekiosk.spring.api.service.order.request.OrderCreateServiceRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.OrderRepository;
@@ -25,9 +24,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.*;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class OrderServiceTest {
+class OrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ProductRepository productRepository;
@@ -171,7 +168,7 @@ class OrderServiceTest {
 
         Stock stock1 = Stock.create("001", 2);
         Stock stock2 = Stock.create("002", 2);
-        stock1.deductQuantity(1);  // todo
+        stock1.deductQuantity(1);  // todo: 이 테스트의 관심사는 재고가 없을 때 주문 생성이므로 재고 감소 메서드는 사용하지 않는 것이 좋다.(메서드 내에서 예외가 터질 수도 있고, given 절에 논리 과정이 들어가서 해석해야 하기 때문)
         stockRepository.saveAll(List.of(stock1, stock2));
 
         OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()

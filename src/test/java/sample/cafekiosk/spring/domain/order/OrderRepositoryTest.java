@@ -3,10 +3,10 @@ package sample.cafekiosk.spring.domain.order;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 import sample.cafekiosk.spring.domain.product.Product;
+import sample.cafekiosk.spring.domain.product.ProductRepository;
 import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import sample.cafekiosk.spring.domain.product.ProductType;
 
@@ -18,15 +18,14 @@ import static org.assertj.core.api.Assertions.tuple;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
-@ActiveProfiles("test")
-@DataJpaTest
-class OrderRepositoryTest {
+@Transactional
+class OrderRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
-    private TestEntityManager testEntityManager;
+    private ProductRepository productRepository;
 
     @DisplayName("시작 날짜와 종료 날짜, 주문상태로 해당하는 모든 주문을 조회한다.")
     @Test
@@ -36,9 +35,7 @@ class OrderRepositoryTest {
         Product product2 = createProduct("002", HANDMADE, SELLING, "카페라떼", 4500);
         Product product3 = createProduct("003", HANDMADE, SELLING, "팥빙수", 7000);
 
-        product1 = testEntityManager.persist(product1);
-        product2 = testEntityManager.persist(product2);
-        product3 = testEntityManager.persist(product3);
+        productRepository.saveAll(List.of(product1, product2, product3));
 
         List<Product> products1 = List.of(product1, product2, product3);
         List<Product> products2 = List.of(product1, product3);
